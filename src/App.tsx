@@ -140,19 +140,29 @@ export default function App() {
 
 // --- SUB-COMPONENTS ---
 
-function Home({ onOpenPlayer, onOpenAdmin, onPlayMeditation, activeMeditation, isPlaying, setIsPlaying }: any) {
+interface HomeProps {
+  onOpenPlayer: () => void;
+  onOpenAdmin: () => void;
+  onPlayMeditation: (meditation: Meditation) => void;
+  activeMeditation: Meditation | null;
+  isPlaying: boolean;
+  setIsPlaying: (playing: boolean) => void;
+}
+
+function Home({ onOpenPlayer, onOpenAdmin, onPlayMeditation, activeMeditation, isPlaying, setIsPlaying }: HomeProps) {
   return (
-    <div className="pb-40">
-      <header className="sticky top-0 w-full z-50 bg-stone-50/60 dark:bg-stone-900/60 backdrop-blur-xl flex justify-between items-center px-6 py-4">
-        <div className="flex items-center gap-3">
-          <img src="/logo.svg" alt="Serenity Logo" className="w-10 h-10" />
-          <span className="text-2xl font-bold text-emerald-900 dark:text-emerald-100 tracking-tighter font-headline">Serenity</span>
+    <div className="pb-72">
+      <header className="sticky top-0 w-full z-50 bg-stone-50/60 dark:bg-stone-900/60 backdrop-blur-xl flex justify-between items-center px-6 py-5">
+        <div className="flex items-center gap-3 h-10">
+          <img src="/logo.svg" alt="Serenity Logo" className="w-10 h-10 object-contain" />
+          <span className="text-2xl font-bold text-emerald-900 dark:text-emerald-100 tracking-tighter font-headline leading-none flex items-center">Serenity</span>
         </div>
         <button 
           onClick={onOpenAdmin}
+          aria-label="Admin Settings"
           className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-stone-200/50 dark:hover:bg-stone-700/50 transition-colors active:scale-95 duration-200"
         >
-          <span className="material-symbols-outlined text-emerald-900 dark:text-emerald-50">settings</span>
+          <span className="material-symbols-outlined text-emerald-900 dark:text-emerald-50 leading-none" aria-hidden="true">settings</span>
         </button>
       </header>
 
@@ -185,7 +195,7 @@ function Home({ onOpenPlayer, onOpenAdmin, onPlayMeditation, activeMeditation, i
           <div className="w-48 h-48 rounded-full bg-primary-fixed-dim/20 flex items-center justify-center relative">
             <div className="absolute inset-0 rounded-full border-2 border-primary-fixed-dim opacity-20 animate-ping"></div>
             <div className="w-32 h-32 rounded-full bg-primary-container shadow-xl flex items-center justify-center text-on-primary">
-              <span className="material-symbols-outlined text-4xl">air</span>
+              <span className="material-symbols-outlined text-4xl" aria-hidden="true">air</span>
             </div>
           </div>
           <p className="mt-6 font-headline text-lg font-medium text-primary">Take a deep breath</p>
@@ -205,7 +215,7 @@ function Home({ onOpenPlayer, onOpenAdmin, onPlayMeditation, activeMeditation, i
               >
                 <div className="flex items-center gap-4">
                   <div className={`w-12 h-12 rounded-full ${idx === 0 ? 'bg-primary-fixed-dim/20' : 'bg-stone-100'} flex items-center justify-center`}>
-                    <span className={`material-symbols-outlined text-2xl ${idx === 0 ? 'text-on-primary' : 'text-stone-300'}`}>
+                    <span className={`material-symbols-outlined text-2xl ${idx === 0 ? 'text-on-primary' : 'text-stone-300'}`} aria-hidden="true">
                       {idx === 0 ? 'play_arrow' : med.day}
                     </span>
                   </div>
@@ -220,7 +230,7 @@ function Home({ onOpenPlayer, onOpenAdmin, onPlayMeditation, activeMeditation, i
                 {idx === 0 ? (
                   <span className="text-xs font-medium opacity-70">{med.duration}</span>
                 ) : (
-                  <span className="material-symbols-outlined text-secondary">check_circle</span>
+                  <span className="material-symbols-outlined text-secondary" aria-hidden="true">check_circle</span>
                 )}
               </div>
             ))}
@@ -232,7 +242,7 @@ function Home({ onOpenPlayer, onOpenAdmin, onPlayMeditation, activeMeditation, i
       {activeMeditation && (
         <div 
           onClick={onOpenPlayer}
-          className="fixed bottom-24 left-4 right-4 z-40 bg-white/70 dark:bg-stone-900/70 backdrop-blur-2xl rounded-2xl p-4 shadow-xl border border-white/20 cursor-pointer"
+          className="fixed bottom-[100px] left-4 right-4 z-40 bg-white/70 dark:bg-stone-900/70 backdrop-blur-2xl rounded-2xl p-4 shadow-xl border border-white/20 cursor-pointer"
         >
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-stone-200">
@@ -245,14 +255,18 @@ function Home({ onOpenPlayer, onOpenAdmin, onPlayMeditation, activeMeditation, i
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <button className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors">
-                <span className="material-symbols-outlined text-primary">replay_10</span>
+              <button 
+                className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors"
+                aria-label="Replay 10 seconds"
+              >
+                <span className="material-symbols-outlined text-primary" aria-hidden="true">replay_10</span>
               </button>
               <button 
                 onClick={(e) => { e.stopPropagation(); setIsPlaying(!isPlaying); }}
+                aria-label={isPlaying ? "Pause" : "Play"}
                 className="w-12 h-12 flex items-center justify-center rounded-full bg-primary text-on-primary shadow-lg active:scale-90 transition-transform"
               >
-                <span className="material-symbols-outlined">{isPlaying ? 'pause' : 'play_arrow'}</span>
+                <span className="material-symbols-outlined" aria-hidden="true">{isPlaying ? 'pause' : 'play_arrow'}</span>
               </button>
             </div>
           </div>
@@ -263,16 +277,16 @@ function Home({ onOpenPlayer, onOpenAdmin, onPlayMeditation, activeMeditation, i
       )}
 
       <nav className="fixed bottom-0 left-0 w-full flex justify-around items-center pb-8 pt-4 px-6 bg-stone-50/80 dark:bg-stone-950/80 backdrop-blur-2xl rounded-t-[2rem] z-50 shadow-[0_-8px_32px_rgba(0,0,0,0.04)]">
-        <a className="flex flex-col items-center justify-center bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-900 dark:text-emerald-100 rounded-full px-5 py-2 active:scale-90 transition-transform" href="#">
-          <span className="material-symbols-outlined">home</span>
+        <a className="flex flex-col items-center justify-center bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-900 dark:text-emerald-100 rounded-full px-5 py-2 active:scale-90 transition-transform" href="#" aria-label="Home">
+          <span className="material-symbols-outlined" aria-hidden="true">home</span>
           <span className="font-body text-[11px] font-semibold uppercase tracking-widest mt-1">Home</span>
         </a>
-        <a className="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 px-5 py-2 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors" href="#">
-          <span className="material-symbols-outlined">subscriptions</span>
+        <a className="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 px-5 py-2 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors" href="#" aria-label="Library">
+          <span className="material-symbols-outlined" aria-hidden="true">subscriptions</span>
           <span className="font-body text-[11px] font-semibold uppercase tracking-widest mt-1">Library</span>
         </a>
-        <a className="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 px-5 py-2 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors" href="#">
-          <span className="material-symbols-outlined">leaderboard</span>
+        <a className="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 px-5 py-2 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors" href="#" aria-label="Stats">
+          <span className="material-symbols-outlined" aria-hidden="true">leaderboard</span>
           <span className="font-body text-[11px] font-semibold uppercase tracking-widest mt-1">Stats</span>
         </a>
       </nav>
@@ -280,7 +294,14 @@ function Home({ onOpenPlayer, onOpenAdmin, onPlayMeditation, activeMeditation, i
   );
 }
 
-function Player({ onClose, meditation, isPlaying, setIsPlaying }: any) {
+interface PlayerProps {
+  onClose: () => void;
+  meditation: Meditation | null;
+  isPlaying: boolean;
+  setIsPlaying: (playing: boolean) => void;
+}
+
+function Player({ onClose, meditation, isPlaying, setIsPlaying }: PlayerProps) {
   return (
     <main className="relative h-screen w-full flex flex-col bg-gradient-to-b from-surface via-surface-container-low to-surface-container-high overflow-hidden">
       <header className="flex justify-between items-center px-8 py-8 z-50">
@@ -290,9 +311,10 @@ function Player({ onClose, meditation, isPlaying, setIsPlaying }: any) {
         </div>
         <button 
           onClick={onClose}
+          aria-label="Close Player"
           className="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container-highest/40 backdrop-blur-md text-on-surface active:scale-95 transition-all"
         >
-          <span className="material-symbols-outlined">close</span>
+          <span className="material-symbols-outlined" aria-hidden="true">close</span>
         </button>
       </header>
 
@@ -311,7 +333,7 @@ function Player({ onClose, meditation, isPlaying, setIsPlaying }: any) {
               alt="Background"
             />
             <div className="relative z-10 flex flex-col items-center text-center px-6">
-              <span className="material-symbols-outlined text-surface-container-lowest text-4xl mb-2">spa</span>
+              <span className="material-symbols-outlined text-surface-container-lowest text-4xl mb-2" aria-hidden="true">spa</span>
             </div>
           </div>
         </div>
@@ -332,33 +354,49 @@ function Player({ onClose, meditation, isPlaying, setIsPlaying }: any) {
         </div>
 
         <div className="flex items-center justify-center gap-10 relative z-10 mb-8">
-          <button className="text-primary hover:text-primary-container active:scale-90 transition-all p-2">
-            <span className="material-symbols-outlined text-4xl">replay_5</span>
+          <button 
+            className="text-primary hover:text-primary-container active:scale-90 transition-all p-2"
+            aria-label="Replay 5 seconds"
+          >
+            <span className="material-symbols-outlined text-4xl" aria-hidden="true">replay_5</span>
           </button>
           <button 
             onClick={() => setIsPlaying(!isPlaying)}
+            aria-label={isPlaying ? "Pause" : "Play"}
             className="w-24 h-24 flex items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-container text-surface shadow-[0_8px_32px_rgba(23,51,39,0.25)] active:scale-95 transition-all"
           >
-            <span className="material-symbols-outlined text-5xl">{isPlaying ? 'pause' : 'play_arrow'}</span>
+            <span className="material-symbols-outlined text-5xl" aria-hidden="true">{isPlaying ? 'pause' : 'play_arrow'}</span>
           </button>
-          <button className="text-primary hover:text-primary-container active:scale-90 transition-all p-2">
-            <span className="material-symbols-outlined text-4xl">forward_5</span>
+          <button 
+            className="text-primary hover:text-primary-container active:scale-90 transition-all p-2"
+            aria-label="Forward 5 seconds"
+          >
+            <span className="material-symbols-outlined text-4xl" aria-hidden="true">forward_5</span>
           </button>
         </div>
       </section>
 
       <footer className="px-8 pb-12 pt-4 flex flex-col items-center gap-6 relative z-10">
         <div className="flex items-center justify-center gap-12 text-on-surface-variant">
-          <button className="flex flex-col items-center gap-1 hover:text-primary transition-colors">
-            <span className="material-symbols-outlined text-2xl">favorite</span>
+          <button 
+            className="flex flex-col items-center gap-1 hover:text-primary transition-colors"
+            aria-label="Save Meditation"
+          >
+            <span className="material-symbols-outlined text-2xl" aria-hidden="true">favorite</span>
             <span className="text-[10px] font-label font-bold uppercase tracking-widest">Save</span>
           </button>
-          <button className="flex flex-col items-center gap-1 hover:text-primary transition-colors">
-            <span className="material-symbols-outlined text-2xl">speed</span>
+          <button 
+            className="flex flex-col items-center gap-1 hover:text-primary transition-colors"
+            aria-label="Adjust Playback Speed"
+          >
+            <span className="material-symbols-outlined text-2xl" aria-hidden="true">speed</span>
             <span className="text-[10px] font-label font-bold uppercase tracking-widest">1.0x</span>
           </button>
-          <button className="flex flex-col items-center gap-1 hover:text-primary transition-colors">
-            <span className="material-symbols-outlined text-2xl">equalizer</span>
+          <button 
+            className="flex flex-col items-center gap-1 hover:text-primary transition-colors"
+            aria-label="Audio Settings"
+          >
+            <span className="material-symbols-outlined text-2xl" aria-hidden="true">equalizer</span>
             <span className="text-[10px] font-label font-bold uppercase tracking-widest">Audio</span>
           </button>
         </div>
@@ -368,7 +406,12 @@ function Player({ onClose, meditation, isPlaying, setIsPlaying }: any) {
   );
 }
 
-function AdminLogin({ onSuccess, onCancel }: any) {
+interface AdminLoginProps {
+  onSuccess: () => void;
+  onCancel: () => void;
+}
+
+function AdminLogin({ onSuccess, onCancel }: AdminLoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -387,7 +430,7 @@ function AdminLogin({ onSuccess, onCancel }: any) {
       <main className="w-full max-w-[440px] px-6 relative z-10">
         <div className="flex flex-col items-center text-center mb-12">
           <div className="w-16 h-16 bg-surface-container-highest flex items-center justify-center rounded-2xl mb-6 editorial-shadow">
-            <span className="material-symbols-outlined text-primary text-3xl">lock</span>
+            <span className="material-symbols-outlined text-primary text-3xl" aria-hidden="true">lock</span>
           </div>
           <h1 className="font-headline text-3xl font-extrabold tracking-tighter text-on-surface mb-2">Admin Portal</h1>
           <p className="font-body text-on-surface-variant text-sm tracking-tight opacity-70">Sign in to manage serenity content</p>
@@ -399,7 +442,7 @@ function AdminLogin({ onSuccess, onCancel }: any) {
               <label className="font-label text-xs font-semibold uppercase tracking-widest text-secondary pl-1" htmlFor="email">Admin Email</label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                  <span className="material-symbols-outlined text-outline text-[20px] group-focus-within:text-primary transition-colors">mail</span>
+                  <span className="material-symbols-outlined text-outline text-[20px] group-focus-within:text-primary transition-colors" aria-hidden="true">mail</span>
                 </div>
                 <input 
                   className="w-full bg-surface-container-low border-transparent focus:border-primary/20 focus:ring-0 rounded-lg pl-12 pr-4 py-4 font-body text-sm text-on-surface placeholder:text-outline/50 transition-all" 
@@ -416,7 +459,7 @@ function AdminLogin({ onSuccess, onCancel }: any) {
               <label className="font-label text-xs font-semibold uppercase tracking-widest text-secondary pl-1" htmlFor="password">Password</label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                  <span className="material-symbols-outlined text-outline text-[20px] group-focus-within:text-primary transition-colors">lock_open</span>
+                  <span className="material-symbols-outlined text-outline text-[20px] group-focus-within:text-primary transition-colors" aria-hidden="true">lock_open</span>
                 </div>
                 <input 
                   className="w-full bg-surface-container-low border-transparent focus:border-primary/20 focus:ring-0 rounded-lg pl-12 pr-12 py-4 font-body text-sm text-on-surface placeholder:text-outline/50 transition-all" 
@@ -427,8 +470,12 @@ function AdminLogin({ onSuccess, onCancel }: any) {
                   onChange={(e) => setPassword(e.target.value)}
                   required 
                 />
-                <button className="absolute inset-y-0 right-4 flex items-center text-outline hover:text-primary transition-colors" type="button">
-                  <span className="material-symbols-outlined text-[20px]">visibility</span>
+                <button 
+                  className="absolute inset-y-0 right-4 flex items-center text-outline hover:text-primary transition-colors" 
+                  type="button"
+                  aria-label="Toggle Password Visibility"
+                >
+                  <span className="material-symbols-outlined text-[20px]" aria-hidden="true">visibility</span>
                 </button>
               </div>
             </div>
@@ -444,7 +491,7 @@ function AdminLogin({ onSuccess, onCancel }: any) {
 
       <footer className="mt-20 flex flex-col items-center justify-center space-y-4 w-full py-12">
         <div className="flex items-center space-x-2 text-stone-400">
-          <span className="material-symbols-outlined text-[16px]">verified_user</span>
+          <span className="material-symbols-outlined text-[16px]" aria-hidden="true">verified_user</span>
           <p className="font-body text-[12px] tracking-wide uppercase opacity-80">Secured by Pocketbase</p>
         </div>
         <div className="flex space-x-6">
@@ -456,7 +503,11 @@ function AdminLogin({ onSuccess, onCancel }: any) {
   );
 }
 
-function AdminPortal({ onLogout }: any) {
+interface AdminPortalProps {
+  onLogout: () => void;
+}
+
+function AdminPortal({ onLogout }: AdminPortalProps) {
   const [title, setTitle] = useState('');
   const [day, setDay] = useState('');
   const [category, setCategory] = useState('Meditation');
@@ -486,26 +537,30 @@ function AdminPortal({ onLogout }: any) {
             </div>
           </div>
           <nav className="flex-1 space-y-1">
-            <a className="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-900 dark:text-emerald-100 font-bold rounded-xl m-2 px-4 py-3 flex items-center space-x-3 transition-all duration-300" href="#">
-              <span className="material-symbols-outlined">cloud_upload</span>
+            <a className="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-900 dark:text-emerald-100 font-bold rounded-xl m-2 px-4 py-3 flex items-center space-x-3 transition-all duration-300" href="#" aria-label="Upload Content">
+              <span className="material-symbols-outlined" aria-hidden="true">cloud_upload</span>
               <span className="font-headline text-base">Upload</span>
             </a>
-            <a className="text-stone-600 dark:text-stone-400 m-2 px-4 py-3 flex items-center space-x-3 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-xl transition-all duration-300" href="#">
-              <span className="material-symbols-outlined">history</span>
+            <a className="text-stone-600 dark:text-stone-400 m-2 px-4 py-3 flex items-center space-x-3 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-xl transition-all duration-300" href="#" aria-label="View History">
+              <span className="material-symbols-outlined" aria-hidden="true">history</span>
               <span className="font-headline text-base">History</span>
             </a>
-            <a className="text-stone-600 dark:text-stone-400 m-2 px-4 py-3 flex items-center space-x-3 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-xl transition-all duration-300" href="#">
-              <span className="material-symbols-outlined">leaderboard</span>
+            <a className="text-stone-600 dark:text-stone-400 m-2 px-4 py-3 flex items-center space-x-3 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-xl transition-all duration-300" href="#" aria-label="View Stats">
+              <span className="material-symbols-outlined" aria-hidden="true">leaderboard</span>
               <span className="font-headline text-base">Stats</span>
             </a>
-            <a className="text-stone-600 dark:text-stone-400 m-2 px-4 py-3 flex items-center space-x-3 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-xl transition-all duration-300" href="#">
-              <span className="material-symbols-outlined">admin_panel_settings</span>
+            <a className="text-stone-600 dark:text-stone-400 m-2 px-4 py-3 flex items-center space-x-3 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-xl transition-all duration-300" href="#" aria-label="Admin Settings">
+              <span className="material-symbols-outlined" aria-hidden="true">admin_panel_settings</span>
               <span className="font-headline text-base">Settings</span>
             </a>
           </nav>
           <div className="px-8 mt-auto pt-8 border-t border-stone-100 dark:border-stone-800">
-            <button onClick={onLogout} className="flex items-center space-x-2 text-stone-400 hover:text-error transition-colors">
-              <span className="material-symbols-outlined">logout</span>
+            <button 
+              onClick={onLogout} 
+              className="flex items-center space-x-2 text-stone-400 hover:text-error transition-colors"
+              aria-label="Sign Out"
+            >
+              <span className="material-symbols-outlined" aria-hidden="true">logout</span>
               <span className="font-label text-sm font-semibold uppercase tracking-widest">Sign Out</span>
             </button>
           </div>
@@ -516,11 +571,17 @@ function AdminPortal({ onLogout }: any) {
         <header className="sticky top-0 w-full z-30 bg-stone-50/60 dark:bg-stone-900/60 backdrop-blur-xl flex justify-between items-center px-10 py-6">
           <h1 className="font-headline text-2xl font-bold text-emerald-900 dark:text-emerald-100 tracking-tighter">Serenity</h1>
           <div className="flex items-center space-x-6">
-            <button className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-stone-200/50 dark:hover:bg-stone-700/50 transition-colors">
-              <span className="material-symbols-outlined text-stone-500">notifications</span>
+            <button 
+              className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-stone-200/50 dark:hover:bg-stone-700/50 transition-colors"
+              aria-label="Notifications"
+            >
+              <span className="material-symbols-outlined text-stone-500" aria-hidden="true">notifications</span>
             </button>
-            <button className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-stone-200/50 dark:hover:bg-stone-700/50 transition-colors">
-              <span className="material-symbols-outlined text-stone-500">settings</span>
+            <button 
+              className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-stone-200/50 dark:hover:bg-stone-700/50 transition-colors"
+              aria-label="Settings"
+            >
+              <span className="material-symbols-outlined text-stone-500" aria-hidden="true">settings</span>
             </button>
           </div>
         </header>
@@ -536,7 +597,7 @@ function AdminPortal({ onLogout }: any) {
               <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <div className="relative z-10 flex flex-col items-center text-center">
                 <div className="w-20 h-20 bg-primary-fixed rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <span className="material-symbols-outlined text-primary text-4xl">upload_file</span>
+                  <span className="material-symbols-outlined text-primary text-4xl" aria-hidden="true">upload_file</span>
                 </div>
                 <h3 className="font-headline text-2xl font-bold text-on-surface mb-2">Drag & Drop Audio File Here</h3>
                 <p className="text-stone-500 font-medium">MP3, WAV, or FLAC (Max 100MB)</p>
@@ -573,7 +634,7 @@ function AdminPortal({ onLogout }: any) {
                         <option value="3">Day 003 - Inner River</option>
                         <option value="45">Day 045 - Inner Stillness</option>
                       </select>
-                      <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400">keyboard_arrow_down</span>
+                      <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400" aria-hidden="true">keyboard_arrow_down</span>
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -596,7 +657,7 @@ function AdminPortal({ onLogout }: any) {
                   disabled={isUploading}
                   className="w-full mt-10 py-5 bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline text-lg font-bold rounded-xl shadow-lg hover:shadow-xl active:scale-95 transition-all flex items-center justify-center space-x-3 disabled:opacity-50"
                 >
-                  <span className="material-symbols-outlined">{isUploading ? 'sync' : 'database'}</span>
+                  <span className="material-symbols-outlined" aria-hidden="true">{isUploading ? 'sync' : 'database'}</span>
                   <span>{isUploading ? 'Uploading...' : 'Upload to Database'}</span>
                 </button>
               </div>
@@ -606,9 +667,9 @@ function AdminPortal({ onLogout }: any) {
           <div className="space-y-8">
             <div className="flex items-center justify-between">
               <h3 className="font-headline text-3xl font-bold text-emerald-900 tracking-tight">Recent Uploads</h3>
-              <button className="text-secondary font-label text-xs font-bold uppercase tracking-widest flex items-center space-x-2">
+              <button className="text-secondary font-label text-xs font-bold uppercase tracking-widest flex items-center space-x-2" aria-label="View History">
                 <span>View History</span>
-                <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                <span className="material-symbols-outlined text-sm" aria-hidden="true">arrow_forward</span>
               </button>
             </div>
             <div className="bg-surface-container-low rounded-xl overflow-hidden">
@@ -626,7 +687,7 @@ function AdminPortal({ onLogout }: any) {
                     <td className="px-8 py-6">
                       <div className="flex items-center space-x-4">
                         <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                          <span className="material-symbols-outlined text-emerald-800">music_note</span>
+                          <span className="material-symbols-outlined text-emerald-800" aria-hidden="true">music_note</span>
                         </div>
                         <span className="font-headline font-bold text-on-surface">Evening Ember Glow</span>
                       </div>
@@ -641,8 +702,11 @@ function AdminPortal({ onLogout }: any) {
                       </div>
                     </td>
                     <td className="px-8 py-6 text-right">
-                      <button className="text-stone-400 hover:text-primary transition-colors">
-                        <span className="material-symbols-outlined">more_vert</span>
+                      <button 
+                        className="text-stone-400 hover:text-primary transition-colors"
+                        aria-label="More Actions"
+                      >
+                        <span className="material-symbols-outlined" aria-hidden="true">more_vert</span>
                       </button>
                     </td>
                   </tr>
