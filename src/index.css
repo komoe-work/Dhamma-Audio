@@ -1,12 +1,17 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
 
 @theme {
   --font-headline: "Plus Jakarta Sans", sans-serif;
   --font-body: "Inter", sans-serif;
   --font-label: "Inter", sans-serif;
 
+  /* Fix for missing border-radius sizes */
+  --radius: 1rem;
+  --radius-lg: 2rem;
+  --radius-xl: 3rem;
+  --radius-full: 9999px;
+
+  /* Colors */
   --color-on-background: #1b1c1a;
   --color-on-primary: #ffffff;
   --color-surface-container-high: #eae8e4;
@@ -54,26 +59,12 @@
   --color-surface-variant: #e4e2de;
   --color-surface-container: #efeeea;
   --color-on-surface: #1b1c1a;
-
-  --radius-lg: 2rem;
-  --radius-xl: 3rem;
 }
 
 @layer base {
   .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    font-family: 'Material Symbols Outlined';
-    font-weight: normal;
-    font-style: normal;
-    font-size: 24px;
-    line-height: 1;
-    letter-spacing: normal;
-    text-transform: none;
     display: inline-block;
-    white-space: nowrap;
-    word-wrap: normal;
-    direction: ltr;
-    -webkit-font-smoothing: antialiased;
   }
 }
 
