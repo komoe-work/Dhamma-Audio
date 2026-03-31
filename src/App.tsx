@@ -71,7 +71,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+    <div className="min-h-screen bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed overflow-x-hidden">
       <AnimatePresence mode="wait">
         {currentScreen === 'home' && (
           <motion.div
@@ -193,7 +193,7 @@ function Home({ onOpenPlayer, onOpenAdmin, onPlayMeditation, activeMeditation, i
 
         <section className="mb-16 flex flex-col items-center">
           <div className="w-48 h-48 rounded-full bg-primary-fixed-dim/20 flex items-center justify-center relative">
-            <div className="absolute inset-0 rounded-full border-2 border-primary-fixed-dim opacity-20 animate-ping"></div>
+            <div className="absolute inset-0 rounded-full border-2 border-primary-fixed-dim opacity-20 animate-breath"></div>
             <div className="w-32 h-32 rounded-full bg-primary-container shadow-xl flex items-center justify-center text-on-primary">
               <span className="material-symbols-outlined text-4xl" aria-hidden="true">air</span>
             </div>
